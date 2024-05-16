@@ -65,7 +65,7 @@
 * 초기화 명렁어
 
     ```js
-    npm init node.js
+    npm init
     ```
 
 **:two: npm i @types/node 설치하기**
