@@ -1,3 +1,1 @@
-import { hello } from "./hello";
-
-hello();
+const a = 1;

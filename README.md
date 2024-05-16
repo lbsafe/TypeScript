@@ -77,6 +77,8 @@
     npm i @types/node
     ```
 
+    npm i @types/node@20.8.0
+
 **:three: typescript 컴파일러 설치하기**
 
 * 설치 명령어
@@ -125,5 +127,155 @@
     ```js
     tsx src/index.ts
     ```
+
+**:warning: 주의 사항 undici-types 에러 발생 시**
+
+>types/node npm 에 따르면 특정버전 이후로 undici-types 에 대한 디펜던시가 발생한다.
+
+**해결방법**
+
+1. node_modules 삭제
+
+    ```js
+    npm uninstall node_modules
+    ```
+
+2. 20버전 이상의 오류가 발생하지 않는 아래 버전으로 재설치
+
+    ```js
+    npm i @types/node@20.8.0
+    ```
+
+<p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/aa40be8f-63b9-4b06-a3d3-1de8b7e92a9e" alt="tsc error" width="100%"></p>
+<p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/aeaaeb5a-a264-4a7c-bc27-4adcb909135a" alt="tsc error" width="600px"></p>
+
 ***
 
+## TypeScript 컴파일러 옵션 설정하기
+
+**:one: TypeScript 컴파일러 설정 파일 생성 (tsconfig.json)**
+
+```js
+tsc --init
+```
+
+**:two: 설정 옵션**
+
+1. include
+
+    > tsc가 컴파일할 타입스크립트 파일들의 범위와 위치를 설정한다.
+    
+    * src 경로 안에 모든 파일을 컴파일 한다.
+    ```js    
+    {
+        "include": ["src"] 
+    }
+    ```
+2. skipLibCheck
+
+    > 타입 정의 파일(.d.ts 확장자를 갖는 파일을 의미)의 타입 검사를 생략하는 옵션
+    
+    * 불 필요한 타입 정의 파일의 타입 검사를 생략한다.
+    ```js    
+    {
+        
+        "compilerOptions": {
+            "skipLibCheck": true
+        },
+        "include": ["src"]
+    }
+    ```
+
+3. target
+
+    > 타입스크립트 코드를 컴파일 해서 만들어지는 자바스크립트 코드의 버전을 설정한다.
+    
+    * 컴파일 결과 생성 되는 자바스크립트 코드의 버전이 ES5로 생성된다.
+    * 자바스크립트 최신버전 ```"target": "ESNext"```
+    ```js    
+    {
+        "compilerOptions": {
+            "target": "ESNext",
+            "skipLibCheck": true
+        },
+        "include": ["src"]
+    }
+    ```
+    
+4. module
+
+    > 자바스크립트의 모듈 시스템을 설정한다.
+    
+    * 변환 되는 자바스크립트의 모듈 시스템을 ES 모듈로 설정한다.
+    * ```"module": "ESNext"```
+    ```js    
+    {
+        "compilerOptions": {
+            "target": "ESNext",
+            "module": "ESNext",
+            "skipLibCheck": true
+        },
+        "include": ["src"]
+    }
+    ```
+
+5. outDir
+
+    > 컴파일 결과 생성 될 자바스크립트 파일들이 위치할 곳을 설정한다.
+    
+    * 변환 되는 자바스크립트의 모듈 시스템을 ES 모듈로 설정한다.
+    * ```"module": "ESNext"```
+    ```js    
+        {
+            "compilerOptions": {
+                "target": "ESNext",
+                "module": "ESNext",
+                "outDir": "dist",
+                "skipLibCheck": true
+            },
+            "include": ["src"]
+        }
+    ```
+
+6. strict
+
+    > 엄격한 타입 검사
+    
+    * 타입스크립트는 매개변수 등의 타입을 프로그래머가 직접 지정하도록 권장한다.
+    * ```"strict": true```
+    ```js    
+    {
+        "compilerOptions": {
+            "target": "ESNext",
+            "module": "ESNext",
+            "outDir": "dist",
+            "strict": true,
+            "skipLibCheck": true,
+        },
+        "include": ["src"]
+    }
+    ```
+
+7. moduleDetection
+
+    > 타입스크립트의 파일을 개별 모듈로 인식한다.
+    
+    * 타입스크립트는 파일을 기본적으로 전역 모듈로 인식해서 파일이 다르더라도 중복 된 변수를 선언 시 에러가 발생한다.
+    * moduleDetection 옵션을 통해 컴파일 시 파일에 ```export {};```를 추가하여 파일들을 개별 모듈로 인식하게 설정해 준다.
+    * 자동으로 추가 되는 모듈 시스템 코드는 module 옵션의 설정에 따라 바뀐다.
+    * 옵션을 사용하지 않을 경우 각 파일에 ```export {};``` 를 추가하여 개별 모듈로 인식하게 한다.
+    * ```"moduleDetection": "force"```
+    ```js    
+    {
+        "compilerOptions": {
+            "target": "ESNext",
+            "module": "ESNext",
+            "outDir": "dist",
+            "strict": true,
+            "moduleDetection": "force",
+            "skipLibCheck": true
+        },
+        "include": ["src"]
+    }
+    ```
+***
