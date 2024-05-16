@@ -1,8 +1,8 @@
-# TypeScirpt
+# TypeScript
 
 <p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/1f35a5fe-74bd-4c5c-abf1-1223ca66f259" alt="ts" width="150px"></p>
 
-## TypeScirpt 에 대하여
+## TypeScript 에 대하여
 >자바스크립트를 더 안전하게 사용할 수 있도록 **타입 관련 기능들을 추가**한 언어  
 (타입스크립트 = 자바스크립트의 확장판)
 ***
@@ -26,7 +26,7 @@
     - 단점: 코드 타입의 오류를 미리 검사할 수 없음
     - 단점: 에러 발생 위험도가 높다
 
-### :three: TypeScirpt의 특징
+### :three: TypeScript의 특징
 
 * **점진적 타입 시스템 (Gradual Type System)**
 
@@ -35,7 +35,7 @@
     3. 실행 전 검사를 통한 타입 안정성 확보
     4. 자동으로 변수의 타입을 추론함
 
-### :four: TypeScirpt의 동작 과정
+### :four: TypeScript의 동작 과정
 
 ```html
             TypeScript
@@ -58,7 +58,7 @@
 ```
 ***
 
-## TypeScirpt 기본 설치 및 사용법
+## TypeScript 기본 설치 및 사용법
 
 **:one: node.js 패키지 초기화**
 
