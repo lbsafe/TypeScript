@@ -394,3 +394,100 @@ const users: [string, number][] = [
 ];
 ```
 ***
+
+## TypeScript의 객체
+
+```js
+// object
+// 객체 리터럴 타입
+let user: {
+    id?: number; // ? 선택적 프로퍼티 유무를 선택할 수 있다.
+    name: string;
+} = {
+    id: 1,
+    name: "오건희",
+};
+
+user = {
+    name: "홍길동",
+}
+
+let config:{
+    readonly apikey: string; // 읽기 전용 프로퍼티 값이 바뀌면 안되는 프로퍼티
+} = {
+    apikey: 'api key'
+}
+
+// 읽기 전용으로 값을 바꿀 수 없음
+// config.apikey = "hacked";
+```
+***
+
+## TypeScript 타입 별칭과 인덱스 시그니처
+
+```js
+// 타입 별칭
+// - 공통적으로 적용 되어야 하는 부분을 효율적으로 작업할 수 있다.
+// - 같은 스코프 내에서 중복 된 이름으로 선언하지 않게 주의한다.
+// - 함수 안에서 선언은 가능하다.
+
+function fun(){
+    type User = {
+        id: number;
+    };
+}
+
+type User = {
+    id: number;
+    name: string;
+    nickname: string;
+    birth: string;
+    bio: string;
+    location: string;
+}
+
+let user: User = {
+    id: 1,
+    name: "오건희",
+    nickname: "lbsafe",
+    birth: "1998.04.26",
+    bio: "안녕",
+    location: "인천광역시"
+};
+
+let user2: User = {
+    id: 2,
+    name: "뿌까",
+    nickname: "뿌까",
+    birth: "2014.10.05",
+    bio: "멍",
+    location: "인천광역시"
+};
+
+// 인덱스 시그니처
+// - 키와 value의 규칙을 이용해서 객체 타입의 정의를 유연하게 해주는 문법
+// - 별도의 프로퍼티를 정의하는 경우 타입이 기존의 시그니처 value와 일치하거나 호환해야 된다.
+// - 규칙을 위반할 프로퍼티가 없으면 프로퍼티가 비어있어도 에러가 생기지 않으니 주의한다.
+type CountryCodes = {
+    [key : string]: string;
+};
+
+let countryCodes: CountryCodes = {
+    Korea: 'ko',
+    UnitedState: "us",
+    UnitedKingdom : "uk",
+};
+
+type CountryNumberCodes = {
+    [key: string]: number;
+    UnitedState: number; // 기존 시그니처의 value와 일치
+    Korea: string; // 기존 시그니처의 value와 일치하지 않아 에러가 발생한다.
+};
+
+let countryNumberAndStringCodes: CountryNumberCodes = {
+    Korea: "ko",
+};
+// 시그니처 프로퍼티만 있는 경우 에러가 발생하지 않는다.
+let countryNumberCodes: CountryNumberCodes = {};
+```
+***
