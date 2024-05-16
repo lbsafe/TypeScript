@@ -166,6 +166,7 @@ tsc --init
     > tsc가 컴파일할 타입스크립트 파일들의 범위와 위치를 설정한다.
     
     * src 경로 안에 모든 파일을 컴파일 한다.
+
     ```js    
     {
         "include": ["src"] 
@@ -176,6 +177,7 @@ tsc --init
     > 타입 정의 파일(.d.ts 확장자를 갖는 파일을 의미)의 타입 검사를 생략하는 옵션
     
     * 불 필요한 타입 정의 파일의 타입 검사를 생략한다.
+
     ```js    
     {
         
@@ -192,6 +194,7 @@ tsc --init
     
     * 컴파일 결과 생성 되는 자바스크립트 코드의 버전이 ES5로 생성된다.
     * 자바스크립트 최신버전 ```"target": "ESNext"```
+
     ```js    
     {
         "compilerOptions": {
@@ -208,6 +211,7 @@ tsc --init
     
     * 변환 되는 자바스크립트의 모듈 시스템을 ES 모듈로 설정한다.
     * ```"module": "ESNext"```
+
     ```js    
     {
         "compilerOptions": {
@@ -225,6 +229,7 @@ tsc --init
     
     * 변환 되는 자바스크립트의 모듈 시스템을 ES 모듈로 설정한다.
     * ```"module": "ESNext"```
+
     ```js    
         {
             "compilerOptions": {
@@ -243,6 +248,7 @@ tsc --init
     
     * 타입스크립트는 매개변수 등의 타입을 프로그래머가 직접 지정하도록 권장한다.
     * ```"strict": true```
+
     ```js    
     {
         "compilerOptions": {
@@ -265,6 +271,7 @@ tsc --init
     * 자동으로 추가 되는 모듈 시스템 코드는 module 옵션의 설정에 따라 바뀐다.
     * 옵션을 사용하지 않을 경우 각 파일에 ```export {};``` 를 추가하여 개별 모듈로 인식하게 한다.
     * ```"moduleDetection": "force"```
+    
     ```js    
     {
         "compilerOptions": {
