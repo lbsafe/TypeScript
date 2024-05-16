@@ -130,20 +130,19 @@
 
 **:warning: 주의 사항 undici-types 에러 발생 시**
 
->types/node npm 에 따르면 특정버전 이후로 undici-types 에 대한 디펜던시가 발생한다.
+>types/node npm 에 따르면 @types 버전이 20버전 이상으로 업데이트되면서 특정 라이브러리에서 타입 검사 오류가 발생
 
 **해결방법**
 
-1. node_modules 삭제
+* tsconfig.json에 compilerOption 내부에 skibLibCheck 옵션을 추가
 
-    ```js
-    npm uninstall node_modules
-    ```
-
-2. 20버전 이상의 오류가 발생하지 않는 아래 버전으로 재설치
-
-    ```js
-    npm i @types/node@20.8.0
+    ```js    
+    {
+        
+        "compilerOptions": {
+            "skipLibCheck": true
+        }
+    }
     ```
 
 <p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/aa40be8f-63b9-4b06-a3d3-1de8b7e92a9e" alt="tsc error" width="100%"></p>
