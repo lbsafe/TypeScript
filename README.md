@@ -689,3 +689,77 @@ b = undefined; // 불가능
 b = anyVar; 불가능
 ```
 ***
+
+## 타입 계층도
+
+### 타입 계층도
+<p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/ff8f55e7-eb1b-47d9-8d41-430f0b7f6ea0" alt="타입계층도" width="100%"></p>
+
+### 업 캐스팅 & 다운 캐스팅
+<p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/8f18913d-c6cb-4269-9c26-7fbd1b31ed69" alt="업다운캐스팅" width="100%"></p>
+
+* 업 캐스팅
+
+    - 서브타입(자식타입)의 값을 (슈퍼타입)부모타입의 값으로 취급하는 것
+    - 가능하다
+
+* 다운 캐스팅
+
+    - (슈퍼타입)부모타입의 값을 서브타입(자식타입)의 값으로 취급하는 것
+    - 불가능하다
+
+```js
+// Unknown 타입
+function unknownExam(){
+    let a: unknown = 1;
+    let b: unknown = "hi";
+    let c: unknown = true;
+    let d: unknown = null;
+    let e: unknown = undefined;
+
+    let unknownVar: unknown;
+
+    // let num: number = unknownVar; 다운 캐스팅 - 불가능
+    // let str: string = unknownVar; 다운 캐스팅 - 불가능
+    // let bool: boolean = unknownVar; 다운 캐스팅 - 불가능
+}
+
+// never 타입
+function neverExam(){
+    function neverFunc(): never{
+        while(true){}
+    }
+
+    let num: number = neverFunc(); // 업 캐스팅 - 가능
+    let str: string = neverFunc(); // 업 캐스팅 - 가능
+    let bool: boolean = neverFunc(); // 업 캐스팅 - 가능
+
+    // let never1: never = 10; 다운 캐스팅 - 불가능
+    // let never2: never = 'hi'; 다운 캐스팅 - 불가능
+    // let never3: never = true; 다운 캐스팅 - 불가능
+}
+
+// void 타입
+function voidExam(){
+    function voidFunc(): void{
+        console.log('hi');
+    }
+
+    let voidVar : void = undefined;
+}
+
+// any 타입
+function anyExam(){
+    let unknownVar : unknown;
+    let anyVar : any;
+    let undefinedVar : undefined;
+    let neverVar : never;
+
+    anyVar = unknownVar;
+    undefinedVar = anyVar;
+    // neverVar = anyVar; // 불가능
+    // any 타입은 모든 타입의 부모, 자식 타입이 될 수 있다.
+    // 예외로 any 타입은 never 타입에 다운 캐스팅은 할 수 없다.
+}
+```
+***
