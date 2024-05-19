@@ -644,9 +644,11 @@ function func1(): string{
 
 function func2(): void{
     console.log('hello');
+    // no return
 }
 
 function func3(): undefined{
+    // no return
 }
 
 let a: void;
