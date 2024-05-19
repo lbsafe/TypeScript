@@ -635,7 +635,7 @@ if(typeof unknownVar === 'number'){ // 타입 정제
 * 특징
     - void -> 공허 -> 아무것도 없다.
     - void -> 아무것도 없음을 의미하는 타입
-    - undefined와 같은 역할을 한다.
+    - undefined와 같은 역할을 한다. (undefined로 명시해도 된다.)
 
 ```js
 function func1(): string{
