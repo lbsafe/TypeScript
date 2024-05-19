@@ -800,37 +800,37 @@ function anyExam(){
     - 객체 타입의 변수를 초기화 할때 객체 리터럴을 사용하면 추가 프로퍼티를 검사한다.
     - 객체 타입에 정의 된 프로퍼티만 넣어야 한다.
 
-```js
-type Book = { // 슈퍼타입
-    name: string;
-    price: number;
-};
+    ```js
+    type Book = { // 슈퍼타입
+        name: string;
+        price: number;
+    };
 
-type ProgrammingBook = { // 서브타입
-    name: string;
-    price: number;
-    skill: string;
-};
+    type ProgrammingBook = { // 서브타입
+        name: string;
+        price: number;
+        skill: string;
+    };
 
-let book: Book;
-let programmingBook: ProgrammingBook = {
-    name: "프론트개발",
-    price: 30000,
-    skill: "reactjs"
-}
+    let book: Book;
+    let programmingBook: ProgrammingBook = {
+        name: "프론트개발",
+        price: 30000,
+        skill: "reactjs"
+    }
 
-book = programmingBook;
-// programmingBook = book; 불가능
+    book = programmingBook;
+    // programmingBook = book; 불가능
 
-let book2: Book = {
-    name: "프론트개발",
-    price: 30000,
-    // skill: "reactjs" // 불가능 객체 타입에 정의 되지 않음
-}
+    let book2: Book = {
+        name: "프론트개발",
+        price: 30000,
+        // skill: "reactjs" // 불가능 객체 타입에 정의 되지 않음
+    }
 
-let book3: Book = programmingBook; // 초기화 시 객체 리터럴을 사용하지 않아 가능하다.
+    let book3: Book = programmingBook; // 초기화 시 객체 리터럴을 사용하지 않아 가능하다.
 
-function func(book: Book){}
-func(programmingBook); // 초기화 시 객체 리터럴을 사용하지 않아 가능하다.
-```
+    function func(book: Book){}
+    func(programmingBook); // 초기화 시 객체 리터럴을 사용하지 않아 가능하다.
+    ```
 ***
