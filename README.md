@@ -491,3 +491,137 @@ let countryNumberAndStringCodes: CountryNumberCodes = {
 let countryNumberCodes: CountryNumberCodes = {};
 ```
 ***
+
+## Enum 타입 (TypeScript Only)
+
+> 여러가지 값들에 각각 이름을 부여해 열거해두고 사용하는 타입
+
+* 특징
+    - Enum은 숫자를 지정하지 않아도 자동으로 숫자가 0부터 들어간다.
+
+        ```js
+        enum Role {
+            ADMIN, // ADMIN = 0
+            USER, // USER = 1
+            GUEST, // GUEST = 2
+        }
+        ```
+    - 첫 숫자를 설정해주면 다음 숫자는 자동으로 설정한 값에서 +1 이 할당된다.
+
+        ```js
+        enum Role {
+            ADMIN = 10,
+            USER, // USER = 11
+            GUEST, // GUEST = 12
+        }
+        ```
+    - 중간 숫자 부터 할당하면 그 전 숫자는 0부터 시작한다.
+
+        ```js
+        enum Role {
+            ADMIN, // ADMIN = 0
+            USER = 10,
+            GUEST, // GUEST = 11
+        }
+        ```
+    - Enum은 컴파일 시 결과가 사리지지 않는다. 컴파일 시 객체로 변환된다.
+
+        ```js
+        // 컴파일 결과
+        var Role;
+        (function (Role) {
+            Role[Role["ADMIN"] = 0] = "ADMIN";
+            Role[Role["USER"] = 1] = "USER";
+            Role[Role["GUEST"] = 2] = "GUEST";
+        })(Role || (Role = {}));
+        ```
+
+* 사용예시
+
+    ```js
+    // 숫자형 enum
+    enum Role {
+        ADMIN = 0,
+        USER = 1,
+        GUEST = 2,
+    }
+
+    // 문자형 enum
+    enum Language {
+        korean = 'ko',
+        english = 'en',
+    }
+
+    const user1 = {
+        name: "오건희",
+        role: Role.ADMIN, // 0 관리자
+        language: Language.korean,
+    }
+    const user2 = {
+        name: "홍길동",
+        role: Role.USER, // 1 일반유저
+        language: Language.english,
+    }
+    const user3 = {
+        name: "아무개",
+        role: Role.GUEST // 2 게스트
+    }
+
+    console.log(user1,user2,user3);
+    // result
+    // { name: '오건희', role: 0, language: 'ko' } { name: '홍길동', role: 1, language: 'en' } { name: '아무개', role: 2 }
+    ```
+***
+
+## any 타입 / unknown 타입 (TypeScript Only)
+
+### any 타입
+
+> 특정 변수의 타입을 확실히 모를 때 사용한다.
+
+* 특징
+    - 변수에 지정할 경우 모든 타입의 값을 할당 받을 수 있다.
+    - type 검사를 실행하지 않기 때문에 사용을 지양한다.
+    - 다른 타입의 값으로도 넣을 수 있다.
+    - :warning: 컴파일 시 에러가 생긴다.
+
+```js
+let anyVar: any = 10;
+
+anyVar = 'hello';
+anyVar = true;
+anyVar = {};
+anyVar = () =>{};
+
+anyVar.toUpperCase();
+anyVar.toFixed();
+
+let num: number = 10;
+num = anyVar;
+```
+
+### unknown 타입
+
+> any 타입과 마찬가지로 특정 변수의 타입을 모를 때 사용한다.
+
+* 특징
+    - any 타입과 다르게 다른 타입의 값으로 넣을 수 없다.
+    - any 타입과 다르게 toUppercase 같은 특정 타입의 기능(연사자 등)은 사용할 수 없다.
+    - unknown 타입은 if문을 통한 typeof 연산자 조건 같이 타입을 밝혀 주었을 때만 unknown 타입의 변수를 다른 타입으로 정제하여 사용 가능하다.
+
+```js
+let unknownVar: unknown;
+
+unknownVar = "";
+unknownVar = 1;
+unknownVar = ()=>{};
+
+// num = unknownVar; 불가능
+
+if(typeof unknownVar === 'number'){ // 타입 정제
+    num = unknownVar;
+}
+```
+
+**:exclamation: 변수에 저장할 타입이 확실하지 않을 때는 any 타입보다 unknown 타입을 활용하는게 안정적이다.**
+***
