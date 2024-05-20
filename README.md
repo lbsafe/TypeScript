@@ -575,7 +575,7 @@ let countryNumberCodes: CountryNumberCodes = {};
 
 ## any 타입 / unknown 타입 (TypeScript Only)
 
-### any 타입
+### :one: any 타입
 
 > 특정 변수의 타입을 확실히 모를 때 사용한다.
 
@@ -600,7 +600,7 @@ let num: number = 10;
 num = anyVar;
 ```
 
-### unknown 타입
+### :two: unknown 타입
 
 > any 타입과 마찬가지로 특정 변수의 타입을 모를 때 사용한다.
 
@@ -628,7 +628,7 @@ if(typeof unknownVar === 'number'){ // 타입 정제
 
 ## void 타입 / never 타입 (TypeScript Only)
 
-### void 타입
+### :one: void 타입
 
 > 함수나 변수가 반환하는 값이 없을 때 사용가능하다.
 
@@ -659,7 +659,7 @@ a = null // tsconfig.js 옵션에 strictNullChecks 옵션을 끄면 예외적으
 a = undefined; // 가능
 ```
 
-### never 타입
+### :two: never 타입
 
 > 반환하는 값이 존재하는게 불가능한 모순인 경우 사용한다.
 
@@ -832,5 +832,89 @@ function anyExam(){
 
     function func(book: Book){}
     func(programmingBook); // 초기화 시 객체 리터럴을 사용하지 않아 가능하다.
+    ```
+***
+
+## 대수 타입
+
+> 여러가지 타입을 합성해서 새롭게 만들어낸 타입으로 합집합 타입과 교집합 타입이 존재한다.
+
+### :one: 합집합 타입 - Union 타입
+
+> 어느 한쪽 조건에 해당 하는 프로퍼티를 갖거나 모든 조건에 해당하는 프로퍼티를 갖는 객체
+
+1. 변수에서 합집합 타입을 적용하면 조건에 맞는 변수 값을 할당할 수 있다.
+
+    ```js
+    let a: string | number | boolean;
+
+    a = 1;
+    a = "hello";
+    a = true;
+    ```
+
+2. 배열에서의 합집합 타입은 요소에 다양한 타입을 넣을 수 있게 해준다.
+
+    ```js
+    let arr: (number | string | boolean)[] = [1, "hi", true];
+    ```
+    
+3. 객체에서의 합집합 타입은 한쪽의 조건에 해당하거나 모든 조건을 갖고 있어야 한다.
+
+    ```js
+    type Dog = {
+        name: string;
+        color: string;
+    };
+
+    type Person = {
+        name: string;
+        language: string;
+    };
+
+    type Union1 = Dog | Person;
+
+    let union1: Union1 = {
+        name: "",
+        color: "",
+    }
+
+    let union2: Union1 = {
+        name: "",
+        language: "",
+    }
+
+    let union3: Union1 = {
+        name: "",
+        color: "",
+        language: "",
+    }
+
+    // 에러 발생 조건에 해당하지 않음
+    let union4: Union1 = {
+        name: "",
+    }
+    ```
+
+### :two: 교집합 타입 - Intersection 타입
+
+>조건에 해당하는 모든 프로퍼티를 갖고 있는 객체
+
+1. 기본 타입에서의 교집합 타입은 never 타입을 나타낸다.
+
+    ```js
+    // 교집합의 값이 존재하지 않는다.
+    let variable: number & string;
+    ```
+
+2. 객체 타입에서의 교집합 타입을 사용하면 해당 조건의 프로퍼티를 모두 갖고 있는 객체만 가능하다.
+    ```js
+    type Intersection = Dog & Person;
+
+    let intersection1: Intersection = {
+        name: "",
+        color: "",
+        language: "",
+    }
     ```
 ***
