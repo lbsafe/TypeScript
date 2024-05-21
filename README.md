@@ -1205,3 +1205,87 @@ function func(value: number | string | Date | null | Person){
     }
     ```
 ***
+
+## 함수 타입 정의
+
+> 타입스크립트에서의 함수 타입이란?  
+어떤 [타입의] 매개변수를 받고 어떤 [타입의] 결과값을 반환하는지를 뜻한다.
+
+```js
+// 생략 가능 매개변수도 기본값을 기준으로 추론하기에
+// func():number 반환값에 타입은 생략 가능하다.
+function func(a:number, b:number): number{
+    return a + b;
+}
+```
+* **화살표 함수의 타입을 정의하는 방법**
+    ```js
+    const add = (a:number, b:number) => a + b;
+    ```
+
+* **함수의 매개변수**
+
+    * 필수 매개변수 (name = '오건희')
+    * 선택적 매개변수 (tall?:number)
+    * 선택적 매개변수는 값이 존재하지 않을 수 있기에 필수 매개변수 앞에 올 수 없다.
+
+    ```js
+    // tall(parameter) tall: number | undefined
+    function introduce(name = '오건희', age:number, tall?:number){
+        console.log(`name : ${name}`);
+        if(typeof tall === 'number'){
+            console.log(`tall : ${tall + 10}`);
+        }
+    }
+    introduce("오건희", 27, 180);
+    introduce("오건희", 27);
+    ```
+
+* rest 파라미터
+
+    ```js
+    // 매개변수의 갯수에 제한을 두고 싶다면 튜플 타입으로 지정해도 가능하다
+    // ex) [number, number, number]
+    function getSum(...rest: number[]){
+        let sum = 0;
+        rest.forEach((it) => (sum += it));
+
+        return sum;
+    }
+
+    getSum(1, 2, 3); // 6
+    getSum(1, 2, 3, 4, 5); // 15
+    ```
+***
+
+## 함수 타입 표현식
+
+> 타입별칭을 이용해 함수의 타입을 별도로 정의하는 방법  
+매개 변수의 갯수와 타입을 맞춰줘야 한다.
+
+```js
+type Operation = (a: number, b: number) => number;
+
+const add: Operation = (a, b) => a + b;
+// const add: (a: number, b: number) => number = (a, b) => a + b; 와 동일
+const sub: Operation = (a, b) => a - b;
+const multiply: Operation = (a, b) => a * b;
+const divide: Operation = (a, b) => a / b;
+```
+
+* **호출 시그니처 (콜 시그니처) 방식**
+
+```js
+type Operation2 = {
+    (a:number, b:number):number;
+    name: string; // 하이브리드 타입
+};
+
+const add2: Operation2 = (a, b) => a + b;
+const sub2: Operation2 = (a, b) => a - b;
+const multiply2: Operation2 = (a, b) => a * b;
+const divide2: Operation2 = (a, b) => a / b;
+
+add2.name;
+```
+***
