@@ -1417,3 +1417,58 @@ func(1);
 func(1, 2, 3);
 ```
 ***
+
+## 사용자 정의 타입 가드
+
+> 이미 만들어진 타입이던가 라이브러리가 제공하는 타입일 경우 서로소 유니온 타입을  
+만들기 위한 리터럴 프로퍼티를 직접 만들지 못할 때 유용하다.
+
+**:one: 사용자 정의 타입 가드 만들기**
+```js
+type Dog = {
+    name: string;
+    isBark: boolean;
+}
+
+type Cat = {
+    name: string;
+    isScratch: boolean;
+}
+
+type Animal = Dog | Cat;
+
+// 함수에 반환값 타입으로 이 함수가 true를 리턴한다면 타입을 지정한다.
+// A is B
+function isDog(animal: Animal): animal is Dog{
+    // 타입 단언을 통해 Dog 타입으로 (타입 좁히기)간주하고 isBark가 있을때 true를 리턴
+    return (animal as Dog).isBark !== undefined;
+}
+
+function isCat(animal: Animal): animal is Cat{
+    return (animal as Cat).isScratch !== undefined;
+}
+```
+
+**:two: 사용자 정의 타입 가드 활용**
+```js
+// Before
+function warning(animal: Animal){
+    if("isBark" in animal){
+        // 강아지
+    }else if("isScratch" in animal){
+        // 고양이
+    }
+}
+
+// After
+function warning2(animal: Animal){
+    if(isDog(animal)){
+        // 강아지
+        animal;
+    }else if(isCat(animal)){
+        // 고양이
+        animal;
+    }
+}
+```
+***
