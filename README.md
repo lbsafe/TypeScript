@@ -1472,3 +1472,146 @@ function warning2(animal: Animal){
 }
 ```
 ***
+
+## 인터페이스
+
+> 타입에 이름을 지어주는 또 다른 문법  
+객체의 구조를 정의하는데 특화된 문법(상속, 합침 등 특수한 기능 제공)
+
+**인터페이스의 특징** 
+* 인터페이스는 선택적 프로퍼티(?), 읽기전용(readonly), 메서드 타입의 정의 등 타입별칭과 동일한 기능을 제공한다.
+* 메서드의 타입을 정의할 때 호출 시그니처를 이용할 경우 메서드의 이름이 소괄호 앞에 붙는다.
+* 함수 오버로딩을 구현할 때는 함수 타입 표현식이 아닌 호출 시그니처를 이용한다.
+
+**타입 별칭과의 차이점**
+
+* 인터페이스는 객체 타입을 정의하는데 특화되어 있어서, 타입 별칭과 다르게 유니온과 인터섹션 타입은 만들 수 없다.
+* 유니온과 인터섹션 타입을 인터페이스에 활용이 필요한 경우, 따로 타입 별칭에 활용하거나 type 주석을 이용한다.
+
+```js
+interface Person {
+    readonly name: string;
+    age?: number;
+    sayHi(): void;
+    sayHi(a:number, b:number): void;
+}
+
+const person: Person | number = { // 인터페이스의 유니온 타입 활용 (타입 주석)
+    name: '오건희',
+    sayHi: function(){
+        console.log('hi')
+    },
+}
+
+person.sayHi();
+person.sayHi(1, 2);
+```
+
+### 인터페이스의 확장
+
+* B extends A
+* A의 모든 프로퍼티를 갖고 있는 상태에서 B의 프로퍼티를 추가(상속)하는 방법
+* 상속을 받는 인터페이스에서 동일한 프로퍼티의 타입을 다시 정의할 수 있다.
+* 다시 정의할 타입은 원본 타입의 서브 타입이어야만 한다. (number 타입 -> number 리터럴 타입)
+* 인터페이스가 아닌 타입 별칭이여도 객체 타입이라면 확장이 가능하다.
+* 인터페이스는 여러가지 인터페이스를 또 확장하는 다중 확장도 가능하다. (다중 확장)
+
+```js
+interface Animal{
+    name: string;
+    age: number;
+}
+
+interface Dog extends Animal{
+    isBark: boolean;
+}
+
+const dog: Dog ={
+    name: "",
+    age: 1,
+    isBark: true
+}
+
+interface Cat extends Animal{
+    isScratch: boolean;
+}
+
+interface Chicken extends Animal{
+    isFly: boolean;
+}
+
+// 타입 별칭의 확장
+type Animal2 = {
+    name: string;
+    color: string;
+}
+
+interface Dog2 extends Animal2{
+    isBark: boolean;
+}
+
+const dog2: Dog2 ={
+    name: "",
+    color: "",
+    isBark: true
+}
+
+// 다중 확장
+interface DogCat extends Dog, Cat{}
+
+const dogcat: DogCat ={
+    name: "",
+    age: 1,
+    isBark: true,
+    isScratch: true,
+}
+```
+
+### 인터페이스 선언 합치기
+ 
+* 기존 타입 별칭에서 동일한 이름으로 정의가 불가능 했다면, 인터페이스는 가능하다.
+* 동일한 이름의 인터페이스는 합쳐지기 때문이다.
+* 동일한 프로퍼티를 중복으로 정의할 경우, 타입을 다르게 정의하는 것 불가능하다.
+* 확장과는 다르게 합침은 프로퍼티를 기존 타입의 서브타입으로 선언해도 불가능 하다.
+
+```js
+interface Person {
+    name: string;
+}
+
+interface Person {
+    // name: number; 다른 타입으로 정의했기에 합치기가 불가능해진다.
+    age: number;
+}
+
+interface Developer extends Person{ // 확장은 기존의 프로퍼티를 서브타입으로 선언 가능
+    name: "hello";
+}
+
+const person: Person = {
+    name: "",
+    age: 27
+}
+```
+
+**활용 예시) 모듈 보강**
+
+> 기존의 인터페이스에서 없는 프로퍼티를 사용할 경우 인터페이스 합침을 활용한다.
+
+```js
+interface Lib{
+    a: number,
+    b: number
+}
+
+interface Lib{ // 인터페이스 합치기로 c 프로퍼티를 추가한다.
+    c: string
+}
+
+const lib: Lib = {
+    a: 1,
+    b: 2,
+    c: "hi" // 후에 추가해야 할 프로퍼티가 생긴 상황
+}
+```
+***
