@@ -308,6 +308,29 @@ tsc --init
         "include": ["src"]
     }
     ```
+
+9. allowJs
+
+    > Javascript 파일 허용
+    
+    * TypeScript 파일이 아닌 Javascript 파일도 허용한다.
+    * ```"allowJs": true```
+    
+    ```js    
+    {
+        "compilerOptions": {
+            "target": "ESNext",
+            "module": "ESNext",
+            "outDir": "dist",
+            "strict": true,
+            "moduleDetection": "force",
+            "strictNullChecks": false,
+            "allowJs": true,
+            "skipLibCheck": true
+        },
+        "include": ["src"]
+    }
+    ```
 ***
 
 ## Typescript의 타입 설정
@@ -1613,5 +1636,238 @@ const lib: Lib = {
     b: 2,
     c: "hi" // 후에 추가해야 할 프로퍼티가 생긴 상황
 }
+```
+***
+
+## JavaScript 클래스란?
+
+> 객체를 만들어 내는 툴이다.
+
+* Before
+
+    ```js
+    let studentA = {
+        name: "오건희",
+        grade: "A+",
+        age: 27,
+        study(){
+            console.log("열심히 공부중");
+        },
+        introduce(){
+            console.log("안녕하세요!");
+        }
+    }
+    ```
+* After
+    - **필드**
+
+        > 클래스가 만들어 낼 객체가 갖게 될 프로퍼티
+
+    - **생성자**
+
+        >실제로 객체를 생성하는 역할을 하는 함수(메서드)  
+        필드를 매개변수로 사용해서 실제로 만들 객체(this)의 프로퍼티로 설정해 준다.
+
+    - **인스턴스**
+
+        >클래스를 이용해서 만든 객체
+
+    ```js
+    class Student {
+        // 필드
+        name;
+        grade;
+        age;
+
+        // 생성자
+        constructor(name, grade, age){
+            this.name = name;
+            this.grade = grade;
+            this.age = age;
+        }
+
+        // 메서드
+        study(){
+            console.log("밥 먹는 중");
+        }
+
+        // 메서드 안에서 생성자 활용
+        introduce(){
+            console.log(`안녕하세요! ${this.name}입니다.`);
+        }
+    }
+
+    // 스튜던트 인스턴스
+    let studentB = new Student('오뿌까', 'A', 10);
+    console.log(studentB);
+    studentB.study();
+    studentB.introduce();
+    ```
+
+### 클래스의 확장(상속)
+
+* 클래스도 TypeScript의 인터페이스 처럼 확장(상속)이 가능하다.
+* class A extends B
+* 클래스의 확장 시 생성자의 매개변수는 확장 받을 클래스의 매개변수를 추가해준다.
+* ```super()``` 함수를 호출해서 생성자의 매개변수를 인수로 전달한다.
+
+```js
+class StudentDeveloper extends Student{
+    // 필드
+    favoriteSkill;
+
+    // 생성자
+    // Student 매개변수 name, grade, age 추가
+    constructor(name, grade, age, favoriteSkill){
+        super(name, grade, age); // super 함수 사용
+        this.favoriteSkill = favoriteSkill;
+    }
+
+    // 메서드
+    programing(){
+        console.log(`${this.favoriteSkill}로 프로그래밍 함`);
+    }
+}
+
+const studentDeveloper = new StudentDeveloper('오건희', 'A+', 27, 'TypeScript');
+console.log(studentDeveloper);
+studentDeveloper.programing();
+```
+***
+
+## TypeScript의 클래스
+
+> TypeScript의 클래스는 JavaScript의 클래스로 취급과 동시에 **type** 으로도 취급된다.
+
+```js
+//  클래스를 만들기 전 객체로 먼저 표현하면 헷갈리지 않는다.
+
+// 클래스로 만들 객체 모양
+const employee = {
+    name: '오건희',
+    age: 27,
+    position: 'developer',
+    work() {
+        console.log("일함");
+    }
+};
+
+class Employee{
+    // 필드
+    name: string;
+    age: number;
+    position: string;
+
+    // 생성자
+    constructor(name: string, age: number, position: string) {
+        this.name = name;
+        this.age = age;
+        this.position = position
+    }
+
+    // 메서드
+    work() {
+        console.log("일함");
+    }
+}
+
+const employeeB = new Employee('오건희', 27, '개발자');
+console.log(employeeB);
+
+// 클래스를 타입으로 취급하여 사용
+const employeeC: Employee = {
+    name : "",
+    age : 0,
+    position : "",
+    work() {},
+}
+```
+### TypeScript의 클래스 확장(상속)
+
+```js
+class ExecutiveOfiicer extends Employee{
+    // 필드
+    officeNumber: number;
+
+    // 생성자
+    constructor(name: string, age: number, position: string, officeNumber: number){
+        super(name, age, position);
+        this.officeNumber = officeNumber;
+    }
+}
+```
+
+### 접근 제어자 (access modifier)
+> 클래스를 만들때 특정 필드나 메소드에 접근할 수 있는 범위를 설정하는 문법  
+(pubic, private, proteced)
+
+
+* **public** - 접근에 제한이 없는 상태 (기본 값)
+* **private** - 클래스 외부에서는 프로퍼티에 접근 및 읽기 불가능 클래스 내부에서만 접근 가능하다.
+* **proteced** - 클래스 외부에서는 접근이 불가능하지만 파생(확장) 클래스에서는 접근이 가능하다.
+
+```js
+class Employee{
+    // 필드
+    private name: string;
+    protected age: number;
+    position: string; // public
+
+    // 생성자
+    constructor(name: string, age: number, position: string) {
+        this.name = name;
+        this.age = age;
+        this.position = position
+    }
+
+    // 메서드
+    work() {
+        console.log(`${this.name} 일함`);
+    }
+}
+
+class ExecutiveOfiicer extends Employee{
+    // 필드
+    officeNumber: number;
+
+    // 생성자
+    constructor(name: string, age: number, position: string, officeNumber: number){
+        super(name, age, position);
+        this.officeNumber = officeNumber;
+    }
+
+    // 메서드
+    fun(){
+        //this.name; // private로 설정 시 확장 클래스에서도 접근이 불가능 하다.
+        this.age; // proteced로 설정 시 확장 클래스에서는 접근이 가능 하다.
+    }
+}
+
+const employee = new Employee('오건희', 27, '개발자');
+// employee.name = '오거니'; // 외부 접근 불가능
+// employee.age = 26; // 외부 접근 불가능   
+employee.position = '퍼블리셔';
+```
+
+### :exclamation:생성자에 접근 제어자 설정
+> 생성자에 접근 제어자 를 설정하면 필드가 자동으로 필드를 정의하고 필드의 값 초기화도 해준다.
+
+```js
+class Employee2{
+    // 필드 생략
+
+    // 생성자 - 접근제어자 설정 자동 필드정의 및 필드값 초기화
+    constructor(private name: string, protected age: number, public position: string) {}
+
+    // 메서드
+    work() {
+        console.log(`${this.name} 일함`);
+    }
+}
+
+const employee2 = new Employee('오건희', 27, '개발자');
+employee2.position = '퍼블리셔';
+
+console.log(employee2);
 ```
 ***
