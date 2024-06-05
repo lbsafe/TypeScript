@@ -1894,3 +1894,91 @@ class Character implements CharacterInterface{
 }
 ```
 ***
+
+## 제네릭
+>함수의 인수에 따라서 반환 값의 타입을 가변적으로 정의해준다.  
+-> 모든 타입에 두루두루 쓸 수 있는 범용적인 함수
+
+### 제네릭 함수
+* ```<T>``` = 타입 변수
+* 타입 변수는 함수를 호출할 때 인수의 타입에 따라 타입 변수에 저장되는 타입이 변한다.
+* 타입변수```<T>``` 선언 후 매개 변수의 타입을 T로, 반환값의 타입을 T로 바꿔준다.
+* 명시적으로 타입을 직접 정의하는 것도 가능하다.
+
+```js
+function func<T>(value: T): T{
+    return value;
+}
+
+let num = func(10); // let num: number
+
+let bool = func(true); // let bool: boolean
+
+let str = func("string"); // let str: string
+
+// 명시적 타입 직접 정의. (튜플)
+let arr = func<[number, number, number]>([1, 2, 3]);
+```
+
+### 타입 변수 응용하기
+
+* 첫번째 사례
+
+    >매개변수 A, B의 타입이 다를 경우  
+    -> 새로운 타입 변수를 생성해서 해결한다.
+
+    ```js
+    function swap<T, U>(a: T, b: U){
+        return [b, a];
+    }
+
+    const [a, b] = swap("1", 2);
+    ```
+
+* 두번째 사례
+
+    > 어떤 타입의 배열이든 다 받을 수 있고, 배열의 첫 번째 요소를 반환하고 그 타입을 추론하는 사례
+
+    ```js
+    /*
+    // 튜플타입의 지정이 필요 없을 경우
+    // -> 타입 변수를 배열타입과 함께 쓴다.
+    // -> 배열에 여러 타입이 존재할 경우 유니온 타입으로 추론된다.
+    function returnFirstValue<T>(data:  T[]){
+        return data[0];
+    }
+    */
+
+    // 유니온 타입이 아닌 정확한 타입을 추론하고 싶다면 튜플타입으로 사용해준다.
+    function returnFirstValue<T>(data: [T, ...unknown[]]){ // 튜플
+        return data[0];
+    }
+
+    let num = returnFirstValue([0, 1, 2]);
+    // 0
+
+    let str = returnFirstValue([1, "hello", "hi"]);
+    // hello
+    ```
+
+
+* 세번째 사례
+
+    > 타입 제한하기  
+    -> length가 number인 프로퍼티를 가지고 있는 객체를 확장(extends)하면서 T를 제한한다.
+
+    ```js
+    function getLenth<T extends {length : number}>(data : T){
+        return data.length;
+    }
+
+    let var1 = getLenth([1, 2, 3]); // 3
+
+    let var2 = getLenth("12345"); // 5
+
+    let var3 = getLenth({length:10}); // 10
+
+    // length 프로퍼티가 없는 값은 제한된다. error!
+    // let var4 = getLenth(10);
+    ```
+***
