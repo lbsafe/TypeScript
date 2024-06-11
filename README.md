@@ -2171,7 +2171,7 @@ const studentUser: User<Student> = {
     name: '홍길동',
     profile: {
         type: 'student',
-        school: '땡땡학교'
+        school: '땅땅학교'
     }
 };
 ```
