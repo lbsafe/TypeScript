@@ -1931,8 +1931,6 @@ class Character implements CharacterInterface{
 
 [link4]: https://github.com/lbsafe/TypeScript#%EB%A7%B5%EB%93%9C-%ED%83%80%EC%9E%85-mapped-type "Mapped(맵드) 타입"
 
-
-
 5. [템플릿 리터럴 타입][link5]
 
 [link5]: https://github.com/lbsafe/TypeScript#%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%A6%AC%ED%84%B0%EB%9F%B4-%ED%83%80%EC%9E%85 "템플릿 리터럴 타입"
