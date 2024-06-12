@@ -1910,6 +1910,26 @@ class Character implements CharacterInterface{
 ```
 ***
 
+## 타입 조작히기
+
+> 기본 타입이나 별칭 또는 인터페이스로 만든 원래 존재하던 여러가지 타입들을 타입스크립트의 특수한 문법을  
+이용해서 상황에 따라 각각 다른 타입으로 변환하는 기능
+
+1. [제네릭][link1]
+
+[link1]: https://github.com/lbsafe/TypeScript#%EC%A0%9C%EB%84%A4%EB%A6%AD "제네릭"
+
+2. [인덱스드 엑세스 타입][link2]
+
+[link2]: https://github.com/lbsafe/TypeScript#%EC%9D%B8%EB%8D%B1%EC%8A%A4%EB%93%9C-%EC%97%91%EC%84%B8%EC%8A%A4-%ED%83%80%EC%9E%85-indexed-access-type "인덱스드 엑세스 타입"
+
+3. keyof 연산자
+4. Mapped(맵드) 타입
+5. 템플릿 리터럴 타입
+6. 조건부 타입
+
+***
+
 ## 제네릭
 >함수의 인수에 따라서 반환 값의 타입을 가변적으로 정의해준다.  
 -> 모든 타입에 두루두루 쓸 수 있는 범용적인 함수
