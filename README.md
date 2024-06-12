@@ -1923,7 +1923,10 @@ class Character implements CharacterInterface{
 
 [link2]: https://github.com/lbsafe/TypeScript#%EC%9D%B8%EB%8D%B1%EC%8A%A4%EB%93%9C-%EC%97%91%EC%84%B8%EC%8A%A4-%ED%83%80%EC%9E%85-indexed-access-type "인덱스드 엑세스 타입"
 
-3. keyof 연산자
+3. [keyof 연산자][link3]
+
+[link3]: https://github.com/lbsafe/TypeScript#keyof-%EC%97%B0%EC%82%B0%EC%9E%90 "keyof 연산자"
+
 4. Mapped(맵드) 타입
 5. 템플릿 리터럴 타입
 6. 조건부 타입
@@ -2486,5 +2489,82 @@ const person2 = {
 }
 
 getPropertyKey2(person2, "name"); // 오건희
+```
+***
+
+## 맵드 타입 (Mapped Type)
+
+> 기존의 객체 타입을 기반으로 새로운 객체 타입을 만드는 문법
+* 맵드 타입은 인터페이스로는 만들 수 없다. 타입 별칭으로만 가능하다.
+* ?를 붙여 줌으로써 선택적 프로퍼티로도 활용이 가능하다.
+
+```js
+interface User{
+    id: number;
+    name: string;
+    age: number;
+}
+
+type PartialUser = {
+// [key in 스트링 리터럴 유니온 타입]?: value(인덱스드 엑세스 타입);
+
+/*
+    {
+        id : user["id"] -> number
+        name : user["name"] -> string
+        age : user["age"] -> number
+    }
+*/
+            /* key */              /* value */
+    [key in "id" | "name" | "age"]?: User[key];
+}
+
+// 한명의 유저 정보를 불러오는 기능
+function fetchUser():User{
+    // ... 기능
+    return{
+        id: 1,
+        name: "오건희",
+        age: 27,
+    }
+}
+
+function updateUser(user: PartialUser){
+    // ... 수정하는 기능
+}
+
+updateUser({
+    // id: 1,
+    // name: "오건희",
+    age: 26,
+});
+```
+
+**맵드 타입의 활용 예시**
+```js
+// keyof 연산자를 응용한 모든 프로퍼티 boolean 타입으로 변환
+type BooleanUser = {
+    [key in keyof User]: boolean;
+}
+
+// 모든 프로퍼티 readonly 속성으로 변환하기
+type ReadonlyUser = {
+    readonly [key in keyof User]: User[key];
+}
+```
+***
+
+## 템플릿 리터럴 타입
+* 스트링 리터럴 타입들을 기반으로 특정 패턴을 갖는 문자열 타입들을 만드는 기능
+* 문자열로 여러가지의 상황들을 표현해 되는 경우 사용한다.
+
+```js
+type Color = "red" | "black" | "green";
+
+type Animal = "dog" | "cat" | "chicken";
+
+type ColoredAnimal = `${Color}-${Animal}`;
+
+const coloredAnimal : ColoredAnimal = "black-cat";
 ```
 ***
