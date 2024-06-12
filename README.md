@@ -128,7 +128,22 @@
     tsx src/index.ts
     ```
 
-**:warning: 주의 사항 undici-types 에러 발생 시**
+**:warning: 주의 사항1 - tsc/tsx 에러 발생 시**
+
+>**Restricted** : (기본) 실행 정책으로 명령어를 하나씩 실행 가능하며 스크립트 파일을 로드하여 실행할 수 없음  
+**RemoteSigned** : 로컬에서 본인이 생성한 스크립트만 실행 가능하며, 인터넷에서 다운로드한 스크립트는 신뢰된 배포자에 의해 서명된 것만 실행 가능
+
+**해결방법**
+
+* VSCODE를 관리자 권환으로 실행 후 터미널에 입력
+
+    ```js
+    Set-ExecutionPolicy RemoteSigned
+    ```
+
+<p align="center"><img src="https://github.com/lbsafe/TypeScript/assets/65703793/a2c9d39a-14c2-413c-a7e6-a6cb1b15f68b" alt="tsc error" width="100%"></p>
+
+**:warning: 주의 사항2 - undici-types 에러 발생 시**
 
 >types/node npm 에 따르면 @types 버전이 20버전 이상으로 업데이트되면서  
 특정 라이브러리에서 타입 검사 오류가 발생
