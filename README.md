@@ -2866,6 +2866,13 @@ type PromiseB = PromiseUnpack<Promise<string>>;
     -> 객체 타입으로부터 특정 프로퍼티를 제거하는 타입
 
     ```js
+    interface Post {
+        title: string;
+        tags: string[];
+        content: string;
+        thumbnailURL?: string;
+    };
+
     // 이해를 위한 Omit 타입 직접 구현
     // Exclude<T, U> 앞에 전달한 타입 변수에서 뒤에 전달한 타입 변수를 제거한 타입 반환
     // T = Post, K = "title"
@@ -2888,6 +2895,13 @@ type PromiseB = PromiseUnpack<Promise<string>>;
     Recode 타입을 통해 동일한 패턴을 갖는 객체 타입을 쉽게 정의할 수 있다.
 
     ```js
+    interface Post {
+        title: string;
+        tags: string[];
+        content: string;
+        thumbnailURL?: string;
+    };
+
     // Before
     type ThumbnailLegacy = {
         large: {
@@ -2913,5 +2927,67 @@ type PromiseB = PromiseUnpack<Promise<string>>;
     type Thumbnail = Record<"large" | "medium" | "small" | "watch", 
     {url: string; size: number}
     >;
+    ```
+
+### 조건부 타입 기반의 유틸리티 타입
+
+* **:one: ```Exclude<T, U>```**
+
+    > -> 제외하다, 추방하다  
+    -> T에서 U를 제거하는 타입
+
+    ```js
+    // 이해를 위한 Exclude 타입 직접 구현
+    type Exclude<T, U> = T extends U ? never : T;
+    // 1단계
+    // Exclude<string, boolean> |
+    // Exclude<boolean, boolean>
+
+    // 2단계
+    // string |
+    // never 
+
+    // 최종
+    // string
+
+    type A = Exclude<string | boolean, boolean>;
+    ```
+
+
+* **:two: ```Extract<T, U>```**
+
+    > -> T에서 U를 추출하는 타입
+
+    ```js
+    // 이해를 위한 Extract 타입 직접 구현
+    type Extract<T, U> = T extends U ? T : never;
+
+    type B = Extract<string | boolean, boolean> // boolean
+    ```
+
+* **:three: ```ReturnType<T>```**
+
+    > -> 함수의 반환값 타입을 추출하는 타입
+
+    ```js
+    // 이해를 위한 ReturnType 직접 구현
+    type ReturnType<T extends (...args : any) => any> = T extends(
+        ...args: any
+    ) => infer R 
+        ? R 
+        : never;
+
+    function funcA(){
+        return "hello";
+    }
+
+    function funcB(){
+        return 10;
+    }
+
+    type RetrunA = ReturnType<typeof funcA> // string
+
+    type RetrunB = ReturnType<typeof funcB> // number
+    ***
     ```
 ***
