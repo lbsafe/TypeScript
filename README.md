@@ -1426,7 +1426,7 @@ func2 = func1; // func2의 매개변수의 개수가 더 적다. (1게 = 2개) �
 * 하나의 함수 func
 * 모든 매개변수의 타입 number
 * Ver1. 매개변수 1개 -> 이 매개변수에 20을 곱한 값 출력
-* Ver2. 매개변수 3개 -> 이 매개변수드을 다 더한 값 출력
+* Ver2. 매개변수 3개 -> 이 매개변수들을 다 더한 값 출력
 
 **:one: 어떤 버전들이 있는지 알려준다. -> 오버로드 시그니쳐**
 
@@ -2572,5 +2572,56 @@ type Animal = "dog" | "cat" | "chicken";
 type ColoredAnimal = `${Color}-${Animal}`;
 
 const coloredAnimal : ColoredAnimal = "black-cat";
+```
+***
+
+## 조건부 타입
+
+> extends와 삼항 연산자를 이용해 조건에 따라 각각 다른 타입을 정의한다.
+
+```js
+type A = number extends string ? string : number; // string
+
+type ObjA = {
+    a : number;
+};
+
+type ObjB = {
+    a : number;
+    b : number;
+};
+
+type B = ObjB extends ObjA ? number : string; // number
+```
+
+### 제네릭과 조건부 타입
+
+```js
+type StringNumberSwitch<T> = T extends number? string : number;
+
+let varA : StringNumberSwitch<number> // varA: string
+let varB : StringNumberSwitch<string> // varB: number
+```
+
+### 제네릭과 조건부 타입과 함수 오버로딩
+
+```js
+// 함수 오버로딩
+function removeSpaces<T>(text: T): T extends string ? string : undefined;
+// 오버토드 시그니처의 타입을 따라가기에 타입 정의는 필요하지 않다.
+// (매개변수만 any 타입으로 정의한다.)
+function removeSpaces(text: any){
+// replaceAll(A, B) 첫번째 인수에 해당하는 문자를 모두 찾아내 두번째 인자로 바꿔주는 메서드
+    if(typeof text === "string"){
+        return text.replaceAll(" ", ""); // 공백 제거
+    }else{
+        return undefined;
+    }
+}
+
+let result = removeSpaces("hi im KeonHee");
+result.toUpperCase();
+
+let result2 = removeSpaces(undefined);
 ```
 ***
