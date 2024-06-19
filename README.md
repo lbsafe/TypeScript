@@ -3088,9 +3088,9 @@ type PromiseB = PromiseUnpack<Promise<string>>;
         </React.StrictMode>
     );
     ```
-### 상태관리와 Props
+### 상태관리와 Props 1
 
-**:one: useState와 Props 사용하기**
+> useState와 Props 사용하기
 
 **타입스크립트에서의 useState와 Props의 특징**
 
@@ -3191,5 +3191,149 @@ children(div 등)을 전달하고 싶으면 받는 컴포넌트 쪽에서 childr
     };
 
     export default Editer;
+    ```
+
+### 상태관리와 Props 2
+
+> useState를 useReducer로 바꾸고 별도의 파일로 타입 관리하기
+
+**타입스크립트에서의 useReducer와 Props의 특징**
+
+1. 공통으로 여러 컴포넌트에서 사용되는 타입은 별도의 타입스크립트 파일로 분리해준다.
+
+2. 타입스크립트에서는 useReducer를 이용할때 action 객체 타입을 서로소 유니온 타입으로 정의하기 때문에 dispatch를 호출할때 하는 실수(오타 등)를 방지할 수 있다.
+
+* src/types.ts
+    ```js
+    // 공통으로 사용되는 타입을 타입스크립트 파일을 분리하고 export로 내보내준다.
+    // 타입 별칭이나 인터페이스로 만든 타입도 별도의 파일로 분리 가능
+    export interface Todo {
+        id: number;
+        content: string;
+    }
+    ```
+
+* App.tsx
+
+    ```js
+    import { useEffect, useReducer, useRef } from "react";
+    import Editor from "./components/Editor";
+    import "./App.css";
+    import { Todo } from "./types"; // 타입 파일 불러오기
+    import TodoItem from "./components/TodoItem";
+
+    // 타입 별칭
+    type Action =
+        | {
+            type: "CREATE";
+            data: {
+                id: number;
+                content: string;
+            };
+        }
+        | {
+            type: "DELETE";
+            id: number;
+        };
+
+    /*
+    위와 동일하다.
+    type Action = {
+        type: "CREATE";
+        data: {
+            id: number;
+            content: string;
+        };
+    } | {
+        type: "DELETE";
+        id: number;
+    };
+    */
+
+    // 상태 변화를 직접 처리하는 함수 reducer
+    // reducer(현재의 state, 요청의 내용이 담긴 액션 객체)
+    function reducer(state: Todo[], action: Action) {
+        switch (action.type) {
+            case "CREATE": {
+                // 새롭게 만들어지는 값
+                return [...state, action.data];
+            }
+            case "DELETE": {
+                // filter를 통한 id가 동일하지 않은 요소들만 반환
+                return state.filter((item) => item.id !== action.id);
+            }
+        }
+    }
+
+    function App() {
+        // useReducer(상태 변화를 직접 처리하는 함수 reducer, 초기값 [])
+        // 상태 변화를 요청하기만 하는 함수 dispatch
+        const [todos, dispatch] = useReducer(reducer, []);
+
+        const idRef = useRef(0);
+
+        const onClickAdd = (text: string) => {
+            dispatch({
+                type: "CREATE",
+                data: {
+                    id: idRef.current++,
+                    content: text,
+                },
+            });
+        };
+
+        const onClickDelete = (id: number) => {
+            dispatch({
+                type: "DELETE",
+                id: id,
+            });
+        };
+
+        useEffect(() => {
+            console.log(todos);
+        }, [todos]);
+
+        return (
+            <div className="App">
+                <h1>Todo</h1>
+                <Editor onClickAdd={onClickAdd} />
+                <div>
+                    {todos.map((todo) => (
+                        <TodoItem
+                            key={todo.id}
+                            {...todo}
+                            onClickDelete={onClickDelete}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+* component/TodoItem.tsx
+    ```js
+    import { Todo } from "../types"; // 타입파일 불러오기
+
+    interface Props extends Todo { // 불러온 타입파일을 확장하여 사용
+        onClickDelete: (id: number) => void; // 전달 받은 props 타입 정의
+    }
+
+    const TodoItem = (props: Props) => {
+        const onClickBtn = () => {
+            props.onClickDelete(props.id);
+        };
+
+        return (
+            <div>
+                {props.id}번 : {props.content}
+                <button onClick={onClickBtn}>삭제</button>
+            </div>
+        );
+    };
+
+    export default TodoItem;
     ```
 ***
