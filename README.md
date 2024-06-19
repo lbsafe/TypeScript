@@ -3088,4 +3088,108 @@ type PromiseB = PromiseUnpack<Promise<string>>;
         </React.StrictMode>
     );
     ```
+### 상태관리와 Props
+
+**:one: useState와 Props 사용하기**
+
+**타입스크립트에서의 useState와 Props의 특징**
+
+1. 리액트의 useState() 메서드는 초기값으로 전달한 인수의 타입에 따라  
+state와 setState의 타입을 자동으로 추론한다. (제네릭 함수)
+
+2. 리액트는 기본적인 기능(onChange 등)들에 대한 타입을 제공하기기에  
+이벤트 핸들러를 사용 시, 매개변수 e의 타입은 미리 정의 된 이벤트 객체 타입을 불러와 사용한다.  
+(각 정의 된 타입은 해당 메서드 이벤트 객체 e에 마우스 커서를 올려서 확인 가능)  
+```React.ChangeEvent<HTMLInputElement>```
+
+3. props를 전달 받을 경우 props의 타입을 별도로 지정해주고 매개변수의 타입으로 설정한다.  
+children(div 등)을 전달하고 싶으면 받는 컴포넌트 쪽에서 children props를 따로 정의해줘야 한다.  
+```children: ReactElement```
+
+**활용 예시**
+
+* App.tsx
+
+    ```js
+    import { useEffect, useRef, useState } from "react";
+    import Editor from "./components/Editor";
+    import "./App.css";
+
+    // 인터페이스로 객체의 구조 정의
+    interface Todo {
+        id: number;
+        content: string;    
+    }
+
+    function App() {
+        // useState의 인수가 Todo의 배열 타입으로 text와 setText도 Todo 배열로 추론
+        const [todos, setTodos] = useState<Todo[]>([]);
+
+        const idRef = useRef(0); // number 추론
+
+        const onClickAdd = (text: string) => {
+            setTodos([
+                ...todos,
+                {
+                    id: idRef.current++,
+                    content: text,
+                },
+            ]);
+        };
+
+        useEffect(() => {
+            console.log(todos);
+        }, [todos]);
+
+        
+        return (
+            <div className="App">
+                <h1>Todo</h1>
+                <Editor onClickAdd={onClickAdd}>
+                    <div>child</div> <!-- props로 children 전달 -->
+                </Editor>
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+* components/Editor.tsx
+
+    ```js
+    import { useState } from "react";
+
+    // props를 전달 받을 경우 Props의 타입을 별도로 지정해준다.
+    interface Props {
+        onClickAdd: (text: string) => void;
+        children: ReactElement; // children을 받을 떄 기본 타입 ReactElement
+    }
+
+    // 매개변수의 타입을 Porps로 지정
+    const Editer = (props: Props) => {
+        // useState의 인수가 string 타입으로 text와 setText도 string으로 추론
+        const [text, setText] = useState("");
+
+        // 매개변수 e의 타입은 미리 정의 된 이벤트 객체 타입을 불러와 사용한다.
+        // React.ChangeEvent<HTMLInputElement>
+        const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setText(e.target.value);
+        };
+
+        const onClickBtn = () => {
+            props.onClickAdd(text);
+            setText("");
+        };
+
+        return (
+            <div>
+                {props.children} <!-- 전달 받은 children -->
+                <input type="text" value={text} onChange={onChangeInput} />
+                <button onClick={onClickBtn}>추가</button>
+            </div>
+        );
+    };
+
+    export default Editer;
+    ```
 ***
