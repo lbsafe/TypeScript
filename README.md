@@ -2991,3 +2991,59 @@ type PromiseB = PromiseUnpack<Promise<string>>;
     ***
     ```
 ***
+
+## 타입스크립트로 리액트 시작하기
+
+### Setting (마이그레이선)
+1. 리액트 설치
+    ```js
+    npx create-react-app .
+    ```
+
+2. 타입 선언 패키지 설치
+    ```js
+    npm i @types/node @types/react @types/react-dom @types/jest
+    ```
+
+3. tsconfig.json 생성 및 설정
+    ```js
+    {
+        "compilerOptions": {
+            "target": "ES5",
+            "module": "CommonJS",
+            "strict": true,
+            "allowJs": true,
+            // 디폴트로 내보낸 값이 없는 모듈에서도 값을 불러 오게 허용해주는 옵션
+            "esModuleInterop": true,
+            // 타입스크립트 컴파일러가 JSX 문법을 해석하게 해주는 옵션
+            "jsx": "react-jsx"
+        },
+        "include": ["src"]
+    }
+    ````
+
+4. 모든 js 파일을 jsx로 변경
+    ```js
+    App.js -> App.jsx
+    index.js -> index.jsx
+    ```
+5. 개별 파일을 tsx로 변경 및 오류 해결
+
+    ```js
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import './index.css';
+    import App from './App';
+
+    // createRoot 메서드는 null 타입을 인수로 받지 않지만
+    // document.getElementById() 메서드가 null 타입의 값을 반활 할 수 있기에
+    // as HTMLElement 이라거 단언해준다.
+    const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+    root.render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    );
+    ```
+***
