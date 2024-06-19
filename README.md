@@ -346,6 +346,48 @@ tsc --init
         "include": ["src"]
     }
     ```
+
+9. esModuleInterop
+
+    > 폴트로 내보낸 값이 없는 모듈에서도 값을 불러 오게 허용해주는 옵션
+
+    * node.js 프로그램에 react-dom 이나 react 같은 외부 라이브러리, 외부 패키지를 설치하고 불러올 때,  
+    디폴트로 내보낸 값이 없을 수 있기 때문에 보통은 해당 옵션을 켜둔다.
+    * ```"esModuleInterop": true```
+
+    ```js
+    {
+        "compilerOptions": {
+            "target": "ES5",
+            "module": "CommonJS",
+            "strict": true,
+            "allowJs": true,
+            "esModuleInterop": true,
+        },
+        "include": ["src"]
+    }
+    ```
+
+10. jsx
+
+    > 타입스크립트 컴파일러가 JSX 문법을 해석하게 해주는 옵션
+
+    * react의 jsx 문법을 TypeScript 컴파일러가 해석할 수 있게 해준다.
+    * ```"jsx": "react-jsx"```
+
+    ```js
+    {
+        "compilerOptions": {
+            "target": "ES5",
+            "module": "CommonJS",
+            "strict": true,
+            "allowJs": true,
+            "esModuleInterop": true,
+            "jsx": "react-jsx"
+        },
+        "include": ["src"]
+    }
+    ```
 ***
 
 ## Typescript의 타입 설정
