@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import Editor from "./components/Editor";
 import "./App.css";
 import { Todo } from "./types";
