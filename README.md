@@ -3517,3 +3517,22 @@ context를 사용할 컴포넌트에서 useContext를 사용하면,
     export default TodoItem;
     ```
 ***
+
+## 타입스크립트에서 외부 라이브러리 사용 방법
+
+> 타입스크립트 환경에서는 자바스크립트와 다르게 외부 라이브러리 또한 타입 검사 기능을 수행하여, 오류가 발생하고 바로 사용이 불가능하다.
+
+* react-router-dom 과 같은 타입스크립트로 제작 된 라이브러리는 바로 사용이 가능하다.
+* [npmjs][npmjs_link] 에서 사용하고자 하는 라이브러리 이름 옆에 TS 마크가 아니라면,  
+DT 마크를 눌러서 해당 라이브러리의 타입 정보를 제공하는 패키지를 추가로 설치하여 사용한다.
+* @types 로 시작하는 타입 정보를 제공하는 패키지를 Definitely types 로 부른다.
+
+[npmjs_link]: https://www.npmjs.com/ "npmjs"
+
+```js
+// 1. 라이브러리 패키지 설치
+npm i lodash
+// 2. 라이브러리 타입 정보 패키지 설치
+npm i @types/lodash
+```
+***
