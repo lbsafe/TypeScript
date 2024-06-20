@@ -3536,3 +3536,12 @@ npm i lodash
 npm i @types/lodash
 ```
 ***
+
+## 타입스크립트 템플릿
+
+> 타입스크립트로 리액트 프로젝트를 시작 시 빠르게 시작할 수 있는 도구
+
+```js
+npx create-react-app my-app --template typescript
+```
+***
