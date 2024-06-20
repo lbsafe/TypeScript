@@ -3336,4 +3336,183 @@ children(div 등)을 전달하고 싶으면 받는 컴포넌트 쪽에서 childr
 
     export default TodoItem;
     ```
+
+### 타입스크립트 Context API
+
+> context를 만들고 useContext 대신 커스텀 훅을 이용해서 context를 사용한다.
+
+**타입스크립트에서의 Context API 특징**
+
+1. ```createContext<T>(value)```는 한개의 타입 변수를 사용하는 제네릭 함수이며,  
+하나의 매개 변수를 필수로 받고 있는 함수이다.  
+그렇기 때문에 인수를 필수로 전달해야하니 초기값 null 을 넣어주고,  
+컴포넌트를 통해 전달할 value의 타입을 제네릭과 유니온을 이용하여 
+명시적으로 타입을 직접 정의해준다.  
+ex)```createContext<Todo[] | null>(null)```
+
+2. createContext를 사용할 때, 타입이 null과의 유니온 타입 <T | null> 으로 지정되어 있기 때문에  
+바로 사용이 불가능 하고, 옵셔닐체이닝(?)으로 사용 해야 한다.  
+이를 해결 하기 위해서는 커스텀 훅을 생성해서 그 안에서 타입 좁히기를 해준다.
+
+* App.tsx
+
+    ```js
+    import { createContext, useContext, useEffect, useReducer, useRef } from "react";
+    import Editor from "./components/Editor";
+    import "./App.css";
+    import { Todo } from "./types";
+    import TodoItem from "./components/TodoItem";
+
+    type Action =
+        | {
+            type: "CREATE";
+            data: {
+                id: number;
+                content: string;
+            };
+        }
+        | {
+            type: "DELETE";
+            id: number;
+        };
+
+    function reducer(state: Todo[], action: Action) {
+        switch (action.type) {
+            case "CREATE": {
+                return [...state, action.data];
+            }
+            case "DELETE": {
+                return state.filter((item) => item.id !== action.id);
+            }
+        }
+    }
+
+    // 초기값을 null로 넣은 후 전달할 변수의 타입을 제네릭 유니온 타입으로 지정
+    export const TodoStateContext = createContext<Todo[] | null>(null);
+    export const TodoDispatchContext = createContext<{
+        onClickAdd: (text: string) => void;
+        onClickDelete: (id: number) => void;
+    } | null>(null);
+
+    export function useTodoDispatch() {
+        const dispatch = useContext(TodoDispatchContext);
+
+        if (!dispatch) throw new Error("TodoDispatchContext error");
+
+        return dispatch;
+    }
+
+    function App() {
+        const [todos, dispatch] = useReducer(reducer, []);
+
+        const idRef = useRef(0);
+
+        const onClickAdd = (text: string) => {
+            dispatch({
+                type: "CREATE",
+                data: {
+                    id: idRef.current++,
+                    content: text,
+                },
+            });
+        };
+
+        const onClickDelete = (id: number) => {
+            dispatch({
+                type: "DELETE",
+                id: id,
+            });
+        };
+
+        useEffect(() => {
+            console.log(todos);
+        }, [todos]);
+
+        return (
+            <div className="App">
+                <h1>Todo</h1>
+                <!-- Provider 설정 -->
+                <TodoStateContext.Provider value={todos}>
+                    <TodoDispatchContext.Provider
+                        value={{ onClickAdd, onClickDelete }}
+                    >
+                        <Editor />
+                        <div>
+                            {todos.map((todo) => (
+                                <TodoItem key={todo.id} {...todo} />
+                            ))}
+                        </div>
+                    </TodoDispatchContext.Provider>
+                </TodoStateContext.Provider>
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+
+* components/Editor.tsx
+    ```js
+    import { useState } from "react";
+    // 커스텀 훅을 불러와 준다.
+    import { useTodoDispatch } from "../App";
+
+    interface Props {}
+
+    const Editer = (props: Props) => {
+        // const dispatch = useContext(TodoDispatchContext);
+        // 커스텀 훅을 이용한다 옵셔널 체이닝 방지
+
+        const dispatch = useTodoDispatch();
+
+        const [text, setText] = useState("");
+
+        const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setText(e.target.value);
+        };
+
+        const onClickBtn = () => {
+            // dispatch?.onClickAdd(text);
+            // 옵셔널 체이닝은 사용을 지양한다.
+            
+            // 옵셔널 체이닝을 사용하지 않고, dispatch 사용 가능
+            dispatch.onClickAdd(text);
+            setText("");
+        };
+
+        return (
+            <div>
+                <input type="text" value={text} onChange={onChangeInput} />
+                <button onClick={onClickBtn}>추가</button>
+            </div>
+        );
+    };
+
+    export default Editer;
+    ```
+
+* components/TodoItem.tsx
+    ```js
+    import { useTodoDispatch } from "../App";
+    import { Todo } from "../types";
+
+    interface Props extends Todo {}
+
+    const TodoItem = (props: Props) => {
+        const dispatch = useTodoDispatch();
+
+        const onClickBtn = () => {
+            dispatch.onClickDelete(props.id);
+        };
+
+        return (
+            <div>
+                {props.id}번 : {props.content}
+                <button onClick={onClickBtn}>삭제</button>
+            </div>
+        );
+    };
+
+    export default TodoItem;
+    ```
 ***
