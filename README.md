@@ -3343,15 +3343,16 @@ children(div 등)을 전달하고 싶으면 받는 컴포넌트 쪽에서 childr
 
 **타입스크립트에서의 Context API 특징**
 
-1. ```createContext<T>(value)```는 한개의 타입 변수를 사용하는 제네릭 함수이며,  
+1. ```createContext<T>(value)``` 는 한개의 타입 변수를 사용하는 제네릭 함수이며,  
 하나의 매개 변수를 필수로 받고 있는 함수이다.  
 그렇기 때문에 인수를 필수로 전달해야하니 초기값 null 을 넣어주고,  
 컴포넌트를 통해 전달할 value의 타입을 제네릭과 유니온을 이용하여 
 명시적으로 타입을 직접 정의해준다.  
-ex)```createContext<Todo[] | null>(null)```
+ex) ```createContext<Todo[] | null>(null)```
 
-2. createContext를 사용할 때, 타입이 null과의 유니온 타입 <T | null> 으로 지정되어 있기 때문에  
-바로 사용이 불가능 하고, 옵셔닐체이닝(?)으로 사용 해야 한다.  
+2. createContext를 사용할 때, 타입이 null과의 유니온 타입 ```<T | null>``` 으로 지정되어 있기 때문에  
+context를 사용할 컴포넌트에서 useContext를 사용하면,  
+바로 사용이 불가능 하며 옵셔닐체이닝(?)으로 사용 해야 한다.  
 이를 해결 하기 위해서는 커스텀 훅을 생성해서 그 안에서 타입 좁히기를 해준다.
 
 * App.tsx
