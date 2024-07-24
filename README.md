@@ -3079,7 +3079,7 @@ type PromiseB = PromiseUnpack<Promise<string>>;
 
     // createRoot 메서드는 null 타입을 인수로 받지 않지만
     // document.getElementById() 메서드가 null 타입의 값을 반활 할 수 있기에
-    // as HTMLElement 이라거 단언해준다.
+    // as HTMLElement 이라고 단언해준다.
     const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
     root.render(
